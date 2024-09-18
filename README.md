@@ -1,5 +1,7 @@
 # CRM App
 
+[![Go Live](https://img.shields.io/badge/Go%20Live%20🚀-green?style=for-the-badge)](https://guibrandt.pythonanywhere.com)
+
 ## Description
 
 The CRM App is a web application designed to securely manage customer data. It allows you to add, update, and remove customer records, with form validations and automatic address filling based on ZIP code.
