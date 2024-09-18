@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block  content %}
+<div class="col-md-6 offset-md-3">
+    <h1> Update Record </h1>
+    <form method="POST">
+        {% csrf_token %}
+        {{form.as_p}}
+        <br>
+        <button type="submit" class ="btn btn-primary btn-login">Update</button>
+        <a class="btn btn-secondary btn-login" href="{% url 'records'%}">Go Back</a>
+    </form>
+    <script>
+        function formatPhoneNumber(value) {
+            value = value.replace(/\D/g, ''); // Remove todos os caracteres que não são dígitos
+            if (value.length > 10) {
+                // Formato com DDD + 9 dígitos: (XX) XXXXX-XXXX
+                return value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+            } else if (value.length > 5) {
+                // Formato com DDD + 8 dígitos: (XX) XXXX-XXXX
+                return value.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
+            } else if (value.length > 2) {
+                // Apenas o DDD: (XX) XXXX
+                return value.replace(/(\d{2})(\d{0,5})/, '($1) $2');
+            } else {
+                return value.replace(/(\d{0,2})/, '($1');
+            }
+        }
+        function formatCep(value){
+            value = value.replace(/\D/g, '');
+            if (value.length > 5) {
+                // Apenas o DDD: (XX) XXXX
+                return value.replace(/(\d{0,5})(\d{0,3})/, '$1-$2');
+            } else {
+                return value.replace(/(\d{0,5})/, '$1');
+            }
+        }
+        document.getElementById('phone').addEventListener('input', function (e) {
+            e.target.value = formatPhoneNumber(e.target.value);
+        });document.getElementById('zipcode').addEventListener('input', function (e) {
+            e.target.value = formatCep(e.target.value);
+        });
+
+        //Include JavaScript to fetch and populate address, city, and state        
+        document.addEventListener('DOMContentLoaded', function() {
+            const zipcodeInput = document.getElementById('zipcode');
+            const addressInput = document.getElementById('address');
+            const cityInput = document.getElementById('city');
+            const stateInput = document.getElementById('state');
+
+            zipcodeInput.addEventListener('blur', function() {
+                const zipcode = zipcodeInput.value;
+
+                if (zipcode) {
+                    fetch(`https://viacep.com.br/ws/${zipcode}/json/`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.erro) {
+                                // Handle error (e.g., show a message to the user)
+                                addressInput.value = '';
+                                cityInput.value = '';
+                                stateInput.value = '';
+                                addressInput.readOnly = false; // Allow user to enter address manually
+                            } else {
+                                cityInput.value = data.localidade;
+                                stateInput.value = data.uf;
+
+                                // Check if logradouro is provided
+                                if (data.logradouro) {
+                                    addressInput.value = data.logradouro;
+                                    addressInput.readOnly = true; // Disable manual input if logradouro is provided
+                                } else {
+                                    addressInput.value = '';
+                                    addressInput.readOnly = false; // Allow user to enter address manually if logradouro is missing
+                                }
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error fetching address data:', error);
+                            addressInput.value = '';
+                            cityInput.value = '';
+                            stateInput.value = '';
+                            addressInput.readOnly = false; // Allow user to enter address manually on error
+                        });
+                } else {
+                    addressInput.value = '';
+                    cityInput.value = '';
+                    stateInput.value = '';
+                    addressInput.readOnly = false; // Allow user to enter address manually if no zipcode
+                }
+            });
+        });
+    </script>
+</div>
+{% endblock  %}

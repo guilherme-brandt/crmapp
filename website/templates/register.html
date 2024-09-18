@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="col-md-6 offset-md-3">
+    <h1>Register</h1>
+    <form method="POST" action="">
+        {% csrf_token %}
+        {% if form.errors %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                Your form has errors
+                {% for field in form %}
+                    {% if field.errors %}
+                        {{ field.errors }}
+                    {% endif %}
+                {% endfor %}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endif %}
+        {# Render individual fields manually #}
+        <p>Username</p>{{ form.username }}
+        <br>
+        <p>Email</p>{{ form.email }}
+        <br>
+        <p>Password</p>{{ form.password1 }}
+        <br>
+        <p>Confirm password</p>{{ form.password2 }}
+        <br>
+        <button type="submit" class="btn btn-primary btn-login">Register</button>
+        <a class="btn btn-secondary btn-login" href={% url 'login' %}>Go back</a>
+    </form>
+</div>
+{% endblock %}

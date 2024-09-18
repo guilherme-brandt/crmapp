@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block content %}
+    {% if user.is_authenticated %}
+    <div class="col-md-8 offset-md-2">
+        <br>
+        <div>
+            <h1>Records</h1>
+            {% if records %}
+            <a href="{% url 'add_record' %}" class="btn btn-success mb-3">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                </svg>
+                Add new
+            </a>
+            <input type="text" id="search-input" class="form-control" placeholder="Search records..." autofocus>
+            {% endif %}
+        </div>
+        <br>
+        <div id="table-container">
+            {% if records %}
+            <table class="table table-hover">
+                <thead class="table-head">
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">City</th>
+                        <th scope="col">Phone</th>
+                    </tr>
+                </thead>
+                <tbody id="records-body">
+                    {% for record in records %}
+                    <tr onclick="window.location.href='{% url 'record' record.id %}'" class="row-clickable">
+                        <td>{{ record.id }}</td>
+                        <td>{{ record.first_name }} {{ record.last_name }}</td>
+                        <td>{{ record.city }}</td>
+                        <td>{{ record.phone }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="container">
+                <h2>There are no records!</h2>
+                <br>
+                <a href="{% url 'add_record' %}" class="btn btn-success btn-login">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                    </svg>
+                    Add new
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% else %}
+    <div class="col-md-6 offset-md-3">
+        <br>
+        <h1> You're not logged in!</h1>
+        <a class="btn btn-primary" href="{% url 'login' %}">Log in</a>
+        <a class="btn btn-primary" href="{% url 'register' %}">Create account</a>
+    </div>
+    {% endif %}
+
+    <script>
+        document.getElementById('search-input').addEventListener('input', function() {
+            const query = this.value;
+            fetch(`/search-records/?q=` + query)
+                .then(response => response.json())
+                .then(data => {
+                    const tbody = document.getElementById('records-body');
+                    tbody.innerHTML = '';  // Limpa o corpo da tabela
+
+                    if (data.records.length > 0) {
+                        // Atualiza a tabela com os novos resultados
+                        data.records.forEach(function(record) {
+                            const row = `<tr onclick="window.location.href='/record/${record.id}'">
+                                            <td>${record.id}</td>
+                                            <td>${record.first_name} ${record.last_name}</td>
+                                            <td>${record.city}</td>
+                                            <td>${record.phone}</td>
+                                         </tr>`;
+                            tbody.innerHTML += row;
+                        });
+                    } else {
+                        // Exibir mensagem de "No records"
+                        tbody.innerHTML = `<tr><td colspan="4" class="text-center">There are no records like this!</td></tr>`;
+                    }
+                });
+        });
+    </script>
+{% endblock %}
