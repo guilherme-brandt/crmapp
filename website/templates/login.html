@@ -1,26 +1,26 @@
 {% extends "base.html" %}
-
+{% load i18n %}
 {%block content%}
 {% if user.is_authenticated %}
-  <h1>You are logged in!</h1> 
+  <h1>{% trans "You are logged in!"%}</h1> 
 {% else %}
 <div class="col-md-6 offset-md-3">
 <br>
-<h1>Login</h1> 
+<h1>{% trans "Login"%}</h1> 
 <form method="POST" action="{% url 'login' %}">
     {% csrf_token %}
     <form>
         <div class="mb-3">
-          <label for="username">Username:</label>
-          <input type="text" class="form-control" name="username" placeholder="Username" aria-describedby="emailHelp" required>
+          <label for="username">{% trans "Username:"%}</label>
+          <input type="text" class="form-control" name="username" placeholder="{% trans "Username"%}" aria-describedby="emailHelp" required>
         </div>
         <div class="mb-3">
-          <label for="password">Password:</label>
-          <input type="password" class="form-control" name="password" placeholder="Password" required>
+          <label for="password">{% trans "Password:"%}</label>
+          <input type="password" class="form-control" name="password" placeholder="{% trans "Password"%}" required>
         </div>
         <div class="d-grid gap-2 ">
-            <button type="submit" class="btn btn-primary btn-login">Login</button>
-            <a href="{% url 'register' %}" class="btn btn-primary btn-login">Create Account</a>
+            <button type="submit" class="btn btn-primary btn-login">{% trans "Login"%}</button>
+            <a href="{% url 'register' %}" class="btn btn-primary btn-login">{% trans "Create Account"%}</a>
         </div>
       </form>
 </form>

@@ -1,18 +1,19 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% block content %}
     {% if user.is_authenticated %}
     <div class="col-md-8 offset-md-2">
         <br>
         <div>
-            <h1>Records</h1>
+            <h1>{% trans "Records"%}</h1>
             {% if records %}
             <a href="{% url 'add_record' %}" class="btn btn-success mb-3">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
                     <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
                 </svg>
-                Add new
+                {% trans "Add new"%}
             </a>
-            <input type="text" id="search-input" class="form-control" placeholder="Search records..." autofocus>
+            <input type="text" id="search-input" class="form-control" placeholder="{% trans "Search records..."%}" autofocus>
             {% endif %}
         </div>
         <br>
@@ -21,10 +22,10 @@
             <table class="table table-hover">
                 <thead class="table-head">
                     <tr>
-                        <th scope="col">ID</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">City</th>
-                        <th scope="col">Phone</th>
+                        <th scope="col">{% trans "ID"%}</th>
+                        <th scope="col">{% trans "Name"%}</th>
+                        <th scope="col">{% trans "City"%}</th>
+                        <th scope="col">{% trans "Phone"%}</th>
                     </tr>
                 </thead>
                 <tbody id="records-body">
@@ -40,13 +41,13 @@
             </table>
             {% else %}
             <div class="container">
-                <h2>There are no records!</h2>
+                <h2>{% trans "There are no records!"%}</h2>
                 <br>
                 <a href="{% url 'add_record' %}" class="btn btn-success btn-login">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
                         <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
                     </svg>
-                    Add new
+                    {% trans "Add new"%}
                 </a>
             </div>
             {% endif %}
@@ -55,9 +56,9 @@
     {% else %}
     <div class="col-md-6 offset-md-3">
         <br>
-        <h1> You're not logged in!</h1>
-        <a class="btn btn-primary" href="{% url 'login' %}">Log in</a>
-        <a class="btn btn-primary" href="{% url 'register' %}">Create account</a>
+        <h1> {% trans "You're not logged in!"%}</h1>
+        <a class="btn btn-primary" href="{% url 'login' %}">{% trans "Log in"%}</a>
+        <a class="btn btn-primary" href="{% url 'register' %}">{% trans "Create account"%}</a>
     </div>
     {% endif %}
 

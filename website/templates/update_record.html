@@ -1,13 +1,14 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% block  content %}
 <div class="col-md-6 offset-md-3">
-    <h1> Update Record </h1>
+    <h1> {% trans "Update Record"%} </h1>
     <form method="POST">
         {% csrf_token %}
         {{form.as_p}}
         <br>
-        <button type="submit" class ="btn btn-primary btn-login">Update</button>
-        <a class="btn btn-secondary btn-login" href="{% url 'records'%}">Go Back</a>
+        <button type="submit" class ="btn btn-primary btn-login">{% trans "Update"%}</button>
+        <a class="btn btn-secondary btn-login" href="{% url 'records'%}">{% trans "Go Back"%}</a>
     </form>
     <script>
         function formatPhoneNumber(value) {

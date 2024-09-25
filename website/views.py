@@ -167,3 +167,18 @@ def contact(request):
                 messages.error(request, 'Erro ao enviar o email. Tente novamente.')
 
     return render(request, 'home.html', {'form': form})
+
+from django.http import HttpResponseRedirect
+from django.utils import translation
+
+def set_language(request):
+    # Obtém o parâmetro 'language_id' da URL
+    language_id = request.GET.get('language_id')
+    
+    if language_id:
+        # Define o idioma no objeto de tradução e na sessão
+        request.session['django_language'] = language_id
+        translation.activate(language_id)
+    
+    # Redireciona para a página inicial
+    return HttpResponseRedirect('/')

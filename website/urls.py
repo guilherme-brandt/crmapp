@@ -13,4 +13,5 @@ urlpatterns = [
     path('update_record/<int:pk>', views.update_record, name='update_record'),
     path('search-records/', views.search_records, name='search_records'),
     path('contact/', views.contact, name='contact'),
+    path('set_language/<int:language_id>/', views.set_language, name='set_language'),
 ]
